@@ -11,7 +11,7 @@ const form = document.querySelector('#form')
 const error = document.createElement('span');
 const copyCreate = document.createElement('span');
 
-//Style
+// Style
 error.classList.add('block', 'text-white', 'mb-4', 'bg-red-400', 'p-2', 'rounded-md', 'font-bold', 'text-center')
 copyCreate.classList.add('block', 'bg-primary-300', 'font-semibold', 'text-center', 'p-1', 'rounded-lg', 'mt-3')
 
@@ -19,22 +19,25 @@ copyCreate.classList.add('block', 'bg-primary-300', 'font-semibold', 'text-cente
 let maxWidth = 15;
 
 
-longitud.addEventListener('input', (e) => {
+longitud.addEventListener('input', eventInput);
+
+copy.addEventListener('click', eventCopy)
+
+longitud.addEventListener('click', _ => widthNow())
+
+document.addEventListener('DOMContentLoaded', _ => widthNow());
+
+function eventInput(e){
   e.preventDefault();
   widthNow()
   let longitud = +e.target.value
   if (longitud >= 0 & longitud < maxWidth) {
     error.remove();
     result.textContent = render(longitud)
-  } else {
-    error.textContent = `Valor Permitidos de 0 ... ${maxWidth}`
-    copyCreate.textContent = 'Copiado'
-    form.insertBefore(error, form.children[0])
-  }
-});
+  } else mensajeError(`Valores Permitidos de 0 ... ${maxWidth}`)
+}
 
-
-copy.addEventListener('click', e => {
+function eventCopy(e) {
   e.preventDefault();
   let texto = result.textContent;
   if (texto !== "") {
@@ -42,12 +45,8 @@ copy.addEventListener('click', e => {
     copyCreate.textContent = 'Copiado'
     longitud.insertAdjacentElement('afterend', copyCreate);
     setTimeout(_ => copyCreate.remove(), 2000);
-  }
-})
-
-longitud.addEventListener('click', _ => widthNow())
-
-document.addEventListener('DOMContentLoaded', _ => widthNow());
+  } else mensajeError(`Ingresar Valores de 0 ... ${maxWidth}`)
+}
 
 function widthNow() {
   if (window.innerWidth >= 413) maxWidth = 19
@@ -55,4 +54,9 @@ function widthNow() {
   if (window.innerWidth >= 636) maxWidth = 25
   // console.log(longitud.getAttribute('max'))
   longitud.setAttribute('max', maxWidth)
+}
+
+function mensajeError(mensaje) {
+  error.textContent = mensaje;
+  form.insertBefore(error, form.children[0])
 }
