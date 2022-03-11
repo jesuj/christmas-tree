@@ -1,19 +1,33 @@
 import "./src/css/tailwind.css";
+import {render} from './src/js/tree.js'
 
 const longitud = document.querySelector('#longitud');
 const result = document.querySelector('#result');
 const copy = document.querySelector('#copy');
 
+const form = document.querySelector('#form')
+const error = document.createElement('span');
+
+let maxWidth = 15;
+
+
 longitud.addEventListener('input', (e)=>{
   e.preventDefault();
+  widthNow()
   let longitud = +e.target.value
-  console.log(longitud)
-  if (longitud >= 0 & longitud < 20) {
+  if (longitud >= 0 & longitud < maxWidth) {
+    error.remove();
     result.textContent = render(longitud)
   }else{
-    alert('valor no permitido valor 20')
+    error.textContent = `Valor Permitidos de 0 ... ${maxWidth}`
+    error.classList.add('block', 'text-white', 'mb-4', 'bg-red-400', 'p-2', 'rounded-md', 'font-bold', 'text-center')
+    form.insertBefore(error,form.children[0])
   }
 });
+
+longitud.addEventListener('click', (e)=>{
+  widthNow();
+})
 
 copy.addEventListener('click', (e)=>{
   e.preventDefault();
@@ -24,18 +38,16 @@ copy.addEventListener('click', (e)=>{
   }
 })
 
-function render(height,type){
-  let impar = 1;
-    let count = height - 1;
-    let tree = Array(height).fill(0).reduce((acc,curr,index)=>{
-        acc += '_'.repeat(count)+'*'.repeat(impar)+'_'.repeat(count)+'\n';
-        impar = impar + 2;
-        count--;
-        return acc;
-    },'')
-    if (height !== 0) {
-      tree += '_'.repeat(height - 1) + '#' + '_'.repeat(height - 1) + '\n';
-      tree += '_'.repeat(height - 1) + '#' + '_'.repeat(height - 1); 
-    }
-    return tree;
+
+document.addEventListener('DOMContentLoaded', (e)=>{
+  widthNow()
+});
+
+function widthNow(){
+  if (window.innerWidth >=413) maxWidth = 19
+  if (window.innerWidth >=500) maxWidth = 22
+  if (window.innerWidth >=636) maxWidth = 25
+  console.log(longitud.getAttribute('max'))
+  longitud.setAttribute('max', maxWidth)
+
 }
