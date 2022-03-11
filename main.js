@@ -30,10 +30,14 @@ document.addEventListener('DOMContentLoaded', _ => widthNow());
 function eventInput(e){
   e.preventDefault();
   widthNow()
-  let longitud = +e.target.value
-  if (longitud >= 0 & longitud < maxWidth) {
+  let heightTree = +e.target.value
+  if (heightTree >= 0 & heightTree < maxWidth) {
     error.remove();
-    result.textContent = render(longitud)
+    if (longitud.className.includes('border-red-500')) {
+      longitud.classList.remove('border-red-500')
+      longitud.classList.add('border-primary-500')
+    }
+    result.textContent = render(heightTree)
   } else mensajeError(`Valores Permitidos de 0 ... ${maxWidth}`)
 }
 
@@ -58,5 +62,9 @@ function widthNow() {
 
 function mensajeError(mensaje) {
   error.textContent = mensaje;
+  if (!longitud.className.includes('border-red-500')) {
+    longitud.classList.remove('border-primary-500')
+    longitud.classList.add('border-red-500')
+  }
   form.insertBefore(error, form.children[0])
 }
