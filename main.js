@@ -1,53 +1,58 @@
 import "./src/css/tailwind.css";
-import {render} from './src/js/tree.js'
+import { render } from './src/js/tree.js'
 
+// Seleccion de los componentes para modificar
 const longitud = document.querySelector('#longitud');
 const result = document.querySelector('#result');
 const copy = document.querySelector('#copy');
-
 const form = document.querySelector('#form')
+
+// Creacion de componentes
 const error = document.createElement('span');
+const copyCreate = document.createElement('span');
+
+//Style
+error.classList.add('block', 'text-white', 'mb-4', 'bg-red-400', 'p-2', 'rounded-md', 'font-bold', 'text-center')
+copyCreate.classList.add('block', 'bg-primary-300', 'font-semibold', 'text-center', 'p-1', 'rounded-lg', 'mt-3')
+
 
 let maxWidth = 15;
 
 
-longitud.addEventListener('input', (e)=>{
+longitud.addEventListener('input', (e) => {
   e.preventDefault();
   widthNow()
   let longitud = +e.target.value
   if (longitud >= 0 & longitud < maxWidth) {
     error.remove();
     result.textContent = render(longitud)
-  }else{
+  } else {
     error.textContent = `Valor Permitidos de 0 ... ${maxWidth}`
-    error.classList.add('block', 'text-white', 'mb-4', 'bg-red-400', 'p-2', 'rounded-md', 'font-bold', 'text-center')
-    form.insertBefore(error,form.children[0])
+    copyCreate.textContent = 'Copiado'
+    form.insertBefore(error, form.children[0])
   }
 });
 
-longitud.addEventListener('click', (e)=>{
-  widthNow();
-})
 
-copy.addEventListener('click', (e)=>{
+copy.addEventListener('click', e => {
   e.preventDefault();
   let texto = result.textContent;
   if (texto !== "") {
     navigator.clipboard.writeText(texto);
-    alert('texto copiado')
+    copyCreate.textContent = 'Copiado'
+    longitud.insertAdjacentElement('afterend', copyCreate);
+    setTimeout(_ => copyCreate.remove(), 2000);
   }
 })
 
+longitud.addEventListener('click', _ => widthNow())
 
-document.addEventListener('DOMContentLoaded', (e)=>{
-  widthNow()
-});
+document.addEventListener('DOMContentLoaded', _ => widthNow());
 
-function widthNow(){
-  if (window.innerWidth >=413) maxWidth = 19
-  if (window.innerWidth >=500) maxWidth = 22
-  if (window.innerWidth >=636) maxWidth = 25
-  console.log(longitud.getAttribute('max'))
+function widthNow() {
+  if (window.innerWidth >= 413) maxWidth = 19
+  if (window.innerWidth >= 500) maxWidth = 22
+  if (window.innerWidth >= 636) maxWidth = 25
+  // console.log(longitud.getAttribute('max'))
   longitud.setAttribute('max', maxWidth)
-
 }
