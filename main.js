@@ -15,10 +15,13 @@ const longitud = document.querySelector('#longitud');
 const result = document.querySelector('#result');
 const copy = document.querySelector('#copy');
 const form = document.querySelector('#form')
+const fullscreen = document.querySelector('#fullscreen');
 
 // Creacion de componentes
 const error = document.createElement('span');
 const copyCreate = document.createElement('span');
+
+let isFullScreen = false;
 
 // Style
 error.classList.add('block', 'text-white', 'mb-4', 'bg-red-400', 'p-2', 'rounded-md', 'font-bold', 'text-center')
@@ -38,6 +41,18 @@ copy.addEventListener('click', eventCopy)
 longitud.addEventListener('click', _ => widthNow())
 
 document.addEventListener('DOMContentLoaded', _ => widthNow());
+
+fullscreen.addEventListener('click',screenFull)
+
+function screenFull(e){
+  e.preventDefault();
+  isFullScreen = !isFullScreen;
+  if (isFullScreen) {
+    document.documentElement.requestFullscreen();
+  }else{
+    document.exitFullscreen()
+  }
+}
 
 function eventInput(e){
   e.preventDefault();
